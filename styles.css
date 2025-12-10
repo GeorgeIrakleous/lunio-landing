@@ -88,103 +88,26 @@ main {
     padding: 40px 0;
 }
 
-.logo-container {
-    margin-bottom: 30px;
-}
-
-.hero-logo {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: #fff;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(107, 182, 255, 0.3);
-}
-
-.hero-title {
-    font-size: 56px;
+.hero h2 {
+    font-size: 48px;
     color: #fff;
     margin-bottom: 20px;
     font-weight: 700;
-    letter-spacing: -1px;
 }
 
 .subtitle {
     font-size: 24px;
     color: #6BB6FF;
-    margin-bottom: 50px;
-    font-weight: 500;
+    margin-bottom: 30px;
+    font-weight: 600;
 }
 
-.hero-features {
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: left;
-}
-
-.hero-feature {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
+.description {
     font-size: 18px;
-    color: #fff;
-}
-
-.checkmark {
-    width: 24px;
-    height: 24px;
-    background: #6BB6FF;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #101010;
-    font-weight: 700;
-    font-size: 14px;
-    flex-shrink: 0;
-}
-
-.screenshot-section {
-    text-align: center;
-    margin-bottom: 100px;
-    padding: 60px 20px;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.screenshot-section h2 {
-    font-size: 42px;
-    color: #fff;
-    margin-bottom: 15px;
-    font-weight: 700;
-}
-
-.section-subtitle {
-    font-size: 20px;
-    color: #6BB6FF;
-    margin-bottom: 40px;
-}
-
-.screenshot-placeholder {
-    max-width: 400px;
+    color: #ccc;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 60px 40px;
-    background: rgba(107, 182, 255, 0.1);
-    border-radius: 20px;
-    border: 2px dashed rgba(107, 182, 255, 0.3);
-}
-
-.screenshot-placeholder p {
-    font-size: 18px;
-    color: #6BB6FF;
-    margin-bottom: 10px;
-}
-
-.screenshot-note {
-    font-size: 14px;
-    color: #999;
+    line-height: 1.8;
 }
 
 .features {
@@ -282,15 +205,15 @@ footer {
         gap: 20px;
     }
 
-    .hero-title {
-        font-size: 42px;
+    .hero h2 {
+        font-size: 36px;
     }
 
     .subtitle {
         font-size: 20px;
     }
 
-    .hero-feature {
+    .description {
         font-size: 16px;
     }
 
@@ -298,7 +221,6 @@ footer {
         grid-template-columns: 1fr;
     }
 
-    .screenshot-section h2,
     .features h2 {
         font-size: 32px;
     }
