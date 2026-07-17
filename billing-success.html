@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment successful — Lunio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="bg-circles" aria-hidden="true">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <div class="container">
+        <header class="site-header">
+            <a href="index.html" class="logo" aria-label="Lunio home">
+                <span class="wordmark">
+                    <span class="wordmark-text">Lun</span>
+                    <span class="wordmark-i">
+                        <span class="wordmark-stem">ı</span>
+                        <span class="wordmark-dot"></span>
+                    </span>
+                    <span class="wordmark-text">o</span>
+                </span>
+            </a>
+        </header>
+
+        <main class="billing-success-main">
+            <div class="billing-success-card">
+                <div class="billing-success-icon" aria-hidden="true">✓</div>
+                <h1 class="section-title">You&apos;re all set</h1>
+                <p class="section-lead">
+                    Your payment is processing. Open the Lunio app to see your active membership —
+                    it usually updates within a few seconds.
+                </p>
+                <a class="billing-primary-btn" id="open-app" href="lunio://payment?success=true&amp;type=subscription">
+                    Open Lunio
+                </a>
+                <p class="billing-footnote">
+                    If the app does not open, return to Lunio manually and check Profile → Billing.
+                </p>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2026 Lunio. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var planId = params.get('planId') || '';
+  var deepLink = 'lunio://payment?success=true&type=subscription';
+  if (planId) deepLink += '&planId=' + encodeURIComponent(planId);
+  var link = document.getElementById('open-app');
+  link.href = deepLink;
+  // Try to open the app automatically once
+  setTimeout(function () {
+    window.location.href = deepLink;
+  }, 600);
+})();
+    </script>
+</body>
+</html>

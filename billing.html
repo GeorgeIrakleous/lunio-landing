@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership — Lunio</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <div class="bg-circles" aria-hidden="true">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <div class="container">
+        <header class="site-header">
+            <a href="index.html" class="logo" aria-label="Lunio home">
+                <span class="wordmark">
+                    <span class="wordmark-text">Lun</span>
+                    <span class="wordmark-i">
+                        <span class="wordmark-stem">ı</span>
+                        <span class="wordmark-dot"></span>
+                    </span>
+                    <span class="wordmark-text">o</span>
+                </span>
+            </a>
+            <nav class="site-nav">
+                <a href="index.html">Home</a>
+                <a href="privacy.html">Privacy</a>
+            </nav>
+        </header>
+
+        <main class="billing-main">
+            <section class="billing-hero">
+                <p class="hero-kicker">Account setup</p>
+                <h1 class="section-title">Choose your Lunio membership</h1>
+                <p class="section-lead" id="billing-status">
+                    Loading your account…
+                </p>
+            </section>
+
+            <div id="auth-panel" class="billing-auth-panel" hidden>
+                <p class="billing-auth-copy">
+                    Sign in with the same email you use in the Lunio app to continue.
+                </p>
+                <label class="billing-label" for="email">Email</label>
+                <input class="billing-input" id="email" type="email" autocomplete="email" placeholder="you@business.com" />
+                <label class="billing-label" for="password">Password</label>
+                <input class="billing-input" id="password" type="password" autocomplete="current-password" placeholder="Password" />
+                <button type="button" class="billing-primary-btn" id="sign-in-btn">Sign in</button>
+                <p class="billing-error" id="auth-error" hidden></p>
+            </div>
+
+            <div id="plans-panel" class="billing-plans" hidden>
+                <article class="billing-plan-card" data-plan="starter">
+                    <div class="billing-plan-top">
+                        <h2>Starter</h2>
+                        <p class="billing-price">€14.99<span>/month</span></p>
+                    </div>
+                    <ul>
+                        <li>Up to 30 clients</li>
+                        <li>120 messages / month</li>
+                        <li>SMS reminders &amp; receipts</li>
+                    </ul>
+                    <button type="button" class="billing-plan-btn" data-plan="starter">Continue with Starter</button>
+                </article>
+
+                <article class="billing-plan-card billing-plan-popular" data-plan="growth">
+                    <span class="billing-popular-badge">Popular</span>
+                    <div class="billing-plan-top">
+                        <h2>Growth</h2>
+                        <p class="billing-price">€27.99<span>/month</span></p>
+                    </div>
+                    <ul>
+                        <li>Up to 70 clients</li>
+                        <li>280 messages / month</li>
+                        <li>SMS reminders &amp; receipts</li>
+                    </ul>
+                    <button type="button" class="billing-plan-btn" data-plan="growth">Continue with Growth</button>
+                </article>
+
+                <article class="billing-plan-card" data-plan="studio">
+                    <div class="billing-plan-top">
+                        <h2>Studio</h2>
+                        <p class="billing-price">€45.99<span>/month</span></p>
+                    </div>
+                    <ul>
+                        <li>Up to 150 clients</li>
+                        <li>600 messages / month</li>
+                        <li>SMS reminders &amp; receipts</li>
+                    </ul>
+                    <button type="button" class="billing-plan-btn" data-plan="studio">Continue with Studio</button>
+                </article>
+            </div>
+
+            <p class="billing-footnote">
+                Secure checkout powered by Stripe. Cancel anytime from the Lunio app.
+            </p>
+            <p class="billing-error" id="checkout-error" hidden></p>
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2026 Lunio. All rights reserved.</p>
+            <p>
+                <a href="privacy.html">Privacy Policy</a>
+                <span class="footer-dot">&middot;</span>
+                <a href="terms.html">Terms of Service</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+(function () {
+  var FUNCTIONS_BASE = 'https://us-central1-gymappp-a16bf.cloudfunctions.net';
+  var SUCCESS_PAGE = 'https://GeorgeIrakleous.github.io/lunio-landing/billing-success.html';
+  var CANCEL_PAGE = 'https://GeorgeIrakleous.github.io/lunio-landing/billing.html?canceled=1';
+
+  var firebaseConfig = {
+    apiKey: 'AIzaSyDCFgQQcvhnxVdq8b7X2GvqAeLooPi6z7k',
+    authDomain: 'gymappp-a16bf.firebaseapp.com',
+    projectId: 'gymappp-a16bf',
+    storageBucket: 'gymappp-a16bf.firebasestorage.app',
+    messagingSenderId: '339895057210',
+    appId: '1:339895057210:web:832dd788c27c2bed1eae03',
+    measurementId: 'G-841CT1G188'
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  var auth = firebase.auth();
+
+  var params = new URLSearchParams(window.location.search);
+  var handoffToken = params.get('token');
+  var preselectPlan = params.get('plan');
+  var wasCanceled = params.get('canceled') === '1';
+
+  var statusEl = document.getElementById('billing-status');
+  var authPanel = document.getElementById('auth-panel');
+  var plansPanel = document.getElementById('plans-panel');
+  var authError = document.getElementById('auth-error');
+  var checkoutError = document.getElementById('checkout-error');
+  var checkoutBusy = false;
+
+  function showError(el, message) {
+    el.hidden = !message;
+    el.textContent = message || '';
+  }
+
+  function setSignedIn(user) {
+    authPanel.hidden = true;
+    plansPanel.hidden = false;
+    statusEl.textContent = user.email
+      ? 'Signed in as ' + user.email + '. Pick a plan to continue.'
+      : 'Signed in. Pick a plan to continue.';
+    if (wasCanceled) {
+      statusEl.textContent = 'Checkout was canceled. You can choose a plan whenever you are ready.';
+    }
+    if (preselectPlan) {
+      var card = document.querySelector('[data-plan="' + preselectPlan + '"]');
+      if (card) card.classList.add('billing-plan-highlight');
+    }
+  }
+
+  function setSignedOut() {
+    plansPanel.hidden = true;
+    authPanel.hidden = false;
+    statusEl.textContent = 'Sign in with the same account you use in the Lunio app.';
+  }
+
+  async function startCheckout(planId) {
+    if (checkoutBusy) return;
+    var user = auth.currentUser;
+    if (!user) {
+      showError(checkoutError, 'Please sign in first.');
+      return;
+    }
+
+    checkoutBusy = true;
+    showError(checkoutError, '');
+    var buttons = document.querySelectorAll('.billing-plan-btn');
+    buttons.forEach(function (btn) {
+      btn.disabled = true;
+      if (btn.getAttribute('data-plan') === planId) btn.textContent = 'Opening checkout…';
+    });
+
+    try {
+      var idToken = await user.getIdToken();
+      var successUrl = SUCCESS_PAGE + '?success=true&type=subscription&planId=' + encodeURIComponent(planId);
+      var response = await fetch(FUNCTIONS_BASE + '/createSubscriptionCheckout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + idToken
+        },
+        body: JSON.stringify({
+          userId: user.uid,
+          planId: planId,
+          successUrl: successUrl,
+          cancelUrl: CANCEL_PAGE
+        })
+      });
+      var data = await response.json().catch(function () { return {}; });
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || 'Could not start checkout.');
+      }
+      window.location.href = data.url;
+    } catch (err) {
+      showError(checkoutError, err.message || 'Checkout failed. Please try again.');
+      checkoutBusy = false;
+      buttons.forEach(function (btn) {
+        btn.disabled = false;
+        var plan = btn.getAttribute('data-plan');
+        btn.textContent = 'Continue with ' + plan.charAt(0).toUpperCase() + plan.slice(1);
+      });
+    }
+  }
+
+  document.querySelectorAll('.billing-plan-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      startCheckout(btn.getAttribute('data-plan'));
+    });
+  });
+
+  document.getElementById('sign-in-btn').addEventListener('click', async function () {
+    showError(authError, '');
+    var email = document.getElementById('email').value.trim();
+    var password = document.getElementById('password').value;
+    if (!email || !password) {
+      showError(authError, 'Enter your email and password.');
+      return;
+    }
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+    } catch (err) {
+      showError(authError, err.message || 'Sign-in failed.');
+    }
+  });
+
+  auth.onAuthStateChanged(function (user) {
+    if (user) setSignedIn(user);
+    else setSignedOut();
+  });
+
+  if (handoffToken) {
+    statusEl.textContent = 'Signing you in…';
+    auth.signInWithCustomToken(handoffToken)
+      .then(function () {
+        // Clean token from URL without reload
+        params.delete('token');
+        var clean = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+        window.history.replaceState({}, '', clean);
+      })
+      .catch(function (err) {
+        console.error(err);
+        statusEl.textContent = 'Could not complete automatic sign-in. Please sign in below.';
+        setSignedOut();
+      });
+  }
+})();
+    </script>
+</body>
+</html>
