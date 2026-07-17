@@ -3,17 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lunio - Client Management Made Simple</title>
+    <meta name="description" content="Lunio helps small service businesses manage clients, track payments, send renewal reminders, and see monthly revenue — all in one simple app.">
+    <title>Lunio — Client management for small businesses</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="bg-circles" aria-hidden="true">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
     <div class="container">
-        <header>
-            <div class="logo">
-                <h1>Lunio</h1>
-            </div>
-            <nav>
+        <header class="site-header">
+            <a href="index.html" class="logo" aria-label="Lunio home">
+                <span class="wordmark">
+                    <span class="wordmark-text">Lun</span>
+                    <span class="wordmark-i">
+                        <span class="wordmark-stem">ı</span>
+                        <span class="wordmark-dot"></span>
+                    </span>
+                    <span class="wordmark-text">o</span>
+                </span>
+            </a>
+            <nav class="site-nav">
                 <a href="#features">Features</a>
+                <a href="#who">Who it's for</a>
                 <a href="#contact">Contact</a>
                 <a href="privacy.html">Privacy Policy</a>
                 <a href="terms.html">Terms of Service</a>
@@ -22,50 +37,115 @@
 
         <main>
             <section class="hero">
-                <h2>Client Management Made Simple</h2>
-                <p class="subtitle">Manage your clients, automate reminders, and grow your business with ease.</p>
-                <p class="description">
-                    Lunio is a mobile application designed for small businesses, coaches, and studios. 
-                    Keep track of your clients, send automated SMS reminders for subscription renewals, 
-                    and streamline your business operations—all in one place.
+                <p class="hero-kicker">Mobile app for small businesses</p>
+                <h1 class="hero-title">Effortless client management<br>for small businesses</h1>
+                <p class="hero-lead">
+                    Lunio is a simple app for people who work with clients on a regular schedule.
+                    See who has paid, who is due, send SMS reminders, and keep an eye on your monthly revenue — without spreadsheets or chaos.
                 </p>
+                <ul class="hero-checklist">
+                    <li>
+                        <span class="check-icon" aria-hidden="true">✓</span>
+                        Manage all your clients in one place
+                    </li>
+                    <li>
+                        <span class="check-icon" aria-hidden="true">✓</span>
+                        Track payments and subscriptions your way
+                    </li>
+                    <li>
+                        <span class="check-icon" aria-hidden="true">✓</span>
+                        Send automatic reminders when renewals are due
+                    </li>
+                </ul>
             </section>
 
-            <section id="features" class="features">
-                <h2>Everything You Need</h2>
-                <div class="feature-grid">
-                    <div class="feature">
-                        <h4>Client Management</h4>
-                        <p>Organize and manage all your client information in one place.</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Automated Reminders</h4>
-                        <p>Send SMS reminders for subscription renewals and payments automatically.</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Subscription Tracking</h4>
-                        <p>Track client subscriptions with flexible renewal systems.</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Payment Management</h4>
-                        <p>Keep track of payments and subscription status effortlessly.</p>
-                    </div>
+            <section id="who" class="who-section">
+                <h2 class="section-title">Built for businesses like yours</h2>
+                <p class="section-lead">
+                    If you bill clients every month — or on a rolling schedule from the day they pay — Lunio fits how you already work.
+                </p>
+                <div class="who-grid">
+                    <article class="who-card">
+                        <h3>Gyms &amp; fitness studios</h3>
+                        <p>Memberships, PT sessions, and monthly packages — tracked from payment day or by calendar month.</p>
+                    </article>
+                    <article class="who-card">
+                        <h3>Dance, martial arts &amp; yoga</h3>
+                        <p>Class-based studios where clients often pay for the month ahead.</p>
+                    </article>
+                    <article class="who-card">
+                        <h3>Private lessons &amp; tutoring</h3>
+                        <p>Language, music, academic coaching — know who is covered and who needs a nudge.</p>
+                    </article>
+                    <article class="who-card">
+                        <h3>Beauty &amp; personal services</h3>
+                        <p>Salons, barbers, and similar businesses with returning clients on a schedule.</p>
+                    </article>
+                    <article class="who-card who-card-wide">
+                        <h3>Other small service businesses</h3>
+                        <p>Any solo or small team that manages clients, takes regular payments, and wants fewer missed renewals.</p>
+                    </article>
                 </div>
             </section>
 
-            <section id="contact" class="contact">
-                <h3>Get in Touch</h3>
-                <p>Have questions or need support?</p>
-                <p>
-                    <strong>Email:</strong> 
-                    <a href="mailto:lunio.software@gmail.com">lunio.software@gmail.com</a>
+            <section id="features" class="features-section">
+                <h2 class="section-title">What you can do in Lunio</h2>
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">◎</div>
+                        <h3>Client list</h3>
+                        <p>Names, phone numbers, and status in one clean list. Add and edit clients in seconds.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">↻</div>
+                        <h3>Flexible payment tracking</h3>
+                        <p>Track by calendar month or from the day each client pays — whichever matches your business.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">✉</div>
+                        <h3>SMS reminders</h3>
+                        <p>Automatic texts when subscriptions are due, so you spend less time chasing payments.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">€</div>
+                        <h3>Revenue tracking</h3>
+                        <p>See how much you brought in each month and review payment history per client.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">☰</div>
+                        <h3>Monthly overview</h3>
+                        <p>Who paid, who is pending, and what is scheduled — at a glance on your dashboard.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">✓</div>
+                        <h3>Payment history</h3>
+                        <p>Log payments as you go and fix mistakes without losing the full picture.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="simple-section">
+                <h2 class="section-title">Simple by design</h2>
+                <p class="simple-copy">
+                    Lunio is not a giant CRM. It is a focused tool for one job: keep your clients organized, your renewals on track, and your numbers visible.
+                    No training manual required.
                 </p>
+            </section>
+
+            <section id="contact" class="contact-section">
+                <h2 class="section-title">Questions or support?</h2>
+                <p class="contact-lead">We are a small team and we read every message.</p>
+                <a class="contact-email" href="mailto:lunio.software@gmail.com">lunio.software@gmail.com</a>
             </section>
         </main>
 
-        <footer>
-            <p>&copy; 2025 Lunio. All rights reserved.</p>
-            <p><a href="privacy.html">Privacy Policy</a> &middot; <a href="terms.html">Terms of Service</a></p>
+        <footer class="site-footer">
+            <p>&copy; 2026 Lunio. All rights reserved.</p>
+            <p>
+                <a href="privacy.html">Privacy Policy</a>
+                <span class="footer-dot">&middot;</span>
+                <a href="terms.html">Terms of Service</a>
+            </p>
         </footer>
     </div>
 </body>
