@@ -471,6 +471,58 @@ main.legal-main a {
     margin-bottom: 32px;
 }
 
+.billing-account-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 920px;
+    margin: 0 auto 28px;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.billing-account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.billing-account-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.billing-account-info strong {
+    color: var(--text);
+    font-size: 0.98rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.billing-signout-btn {
+    flex-shrink: 0;
+    padding: 10px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.billing-signout-btn:hover {
+    border-color: var(--accent);
+}
+
 .billing-auth-panel {
     max-width: 400px;
     margin: 0 auto 40px;

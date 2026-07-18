@@ -42,9 +42,18 @@
                 </p>
             </section>
 
+            <div id="account-bar" class="billing-account-bar" hidden>
+                <div class="billing-account-info">
+                    <span class="billing-account-label">Signed in as</span>
+                    <strong id="account-email"></strong>
+                </div>
+                <button type="button" class="billing-signout-btn" id="sign-out-btn">Sign out</button>
+            </div>
+
             <div id="auth-panel" class="billing-auth-panel" hidden>
                 <p class="billing-auth-copy">
-                    Sign in with the same email you use in the Lunio app to continue.
+                    Sign in with the same email and password you use in the Lunio app.
+                    If you signed up with Google or Apple, open this page from the app so we can connect your account automatically.
                 </p>
                 <label class="billing-label" for="email">Email</label>
                 <input class="billing-input" id="email" type="email" autocomplete="email" placeholder="you@business.com" />
@@ -135,10 +144,14 @@
   var handoffToken = params.get('token');
   var preselectPlan = params.get('plan');
   var wasCanceled = params.get('canceled') === '1';
+  // While handoff runs, ignore the old browser session so we don't flash the wrong account
+  var handoffInProgress = !!handoffToken;
 
   var statusEl = document.getElementById('billing-status');
   var authPanel = document.getElementById('auth-panel');
   var plansPanel = document.getElementById('plans-panel');
+  var accountBar = document.getElementById('account-bar');
+  var accountEmail = document.getElementById('account-email');
   var authError = document.getElementById('auth-error');
   var checkoutError = document.getElementById('checkout-error');
   var checkoutBusy = false;
@@ -148,15 +161,24 @@
     el.textContent = message || '';
   }
 
+  function cleanTokenFromUrl() {
+    params.delete('token');
+    var clean = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.history.replaceState({}, '', clean);
+  }
+
   function setSignedIn(user) {
     authPanel.hidden = true;
     plansPanel.hidden = false;
-    statusEl.textContent = user.email
-      ? 'Signed in as ' + user.email + '. Pick a plan to continue.'
-      : 'Signed in. Pick a plan to continue.';
+    accountBar.hidden = false;
+    accountEmail.textContent = user.email || user.uid;
+
     if (wasCanceled) {
       statusEl.textContent = 'Checkout was canceled. You can choose a plan whenever you are ready.';
+    } else {
+      statusEl.textContent = 'Pick a plan to continue.';
     }
+
     if (preselectPlan) {
       var card = document.querySelector('[data-plan="' + preselectPlan + '"]');
       if (card) card.classList.add('billing-plan-highlight');
@@ -165,6 +187,8 @@
 
   function setSignedOut() {
     plansPanel.hidden = true;
+    accountBar.hidden = true;
+    accountEmail.textContent = '';
     authPanel.hidden = false;
     statusEl.textContent = 'Sign in with the same account you use in the Lunio app.';
   }
@@ -238,24 +262,44 @@
     }
   });
 
+  document.getElementById('sign-out-btn').addEventListener('click', async function () {
+    showError(checkoutError, '');
+    try {
+      await auth.signOut();
+    } catch (err) {
+      showError(checkoutError, err.message || 'Could not sign out.');
+    }
+  });
+
   auth.onAuthStateChanged(function (user) {
+    // Don't apply the old browser session while app handoff is replacing it
+    if (handoffInProgress) return;
     if (user) setSignedIn(user);
     else setSignedOut();
   });
 
   if (handoffToken) {
-    statusEl.textContent = 'Signing you in…';
-    auth.signInWithCustomToken(handoffToken)
+    statusEl.textContent = 'Connecting your Lunio account…';
+    auth.signOut()
+      .catch(function () { /* ignore if already signed out */ })
       .then(function () {
-        // Clean token from URL without reload
-        params.delete('token');
-        var clean = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
-        window.history.replaceState({}, '', clean);
+        return auth.signInWithCustomToken(handoffToken);
+      })
+      .then(function () {
+        cleanTokenFromUrl();
+        handoffInProgress = false;
+        if (auth.currentUser) setSignedIn(auth.currentUser);
+        else setSignedOut();
       })
       .catch(function (err) {
-        console.error(err);
-        statusEl.textContent = 'Could not complete automatic sign-in. Please sign in below.';
-        setSignedOut();
+        console.error('Handoff sign-in failed:', err);
+        handoffInProgress = false;
+        cleanTokenFromUrl();
+        statusEl.textContent = 'Could not connect automatically from the app. Please sign in below.';
+        // Clear any leftover session so the wrong account is not shown
+        auth.signOut().finally(function () {
+          setSignedOut();
+        });
       });
   }
 })();
