@@ -34,14 +34,6 @@
         </header>
 
         <main class="billing-main">
-            <section class="billing-hero">
-                <p class="hero-kicker">Account setup</p>
-                <h1 class="section-title">Choose your Lunio membership</h1>
-                <p class="section-lead" id="billing-status">
-                    Loading your account…
-                </p>
-            </section>
-
             <div id="account-bar" class="billing-account-bar" hidden>
                 <div class="billing-account-info">
                     <span class="billing-account-label">Signed in as</span>
@@ -49,6 +41,11 @@
                 </div>
                 <button type="button" class="billing-signout-btn" id="sign-out-btn">Sign out</button>
             </div>
+
+            <section class="paywall-hero">
+                <h1 class="paywall-headline">Keep your business in check</h1>
+                <p class="paywall-subtext" id="billing-status">Loading your account…</p>
+            </section>
 
             <div id="auth-panel" class="billing-auth-panel" hidden>
                 <p class="billing-auth-copy">
@@ -63,51 +60,106 @@
                 <p class="billing-error" id="auth-error" hidden></p>
             </div>
 
-            <div id="plans-panel" class="billing-plans" hidden>
-                <article class="billing-plan-card" data-plan="starter">
-                    <div class="billing-plan-top">
-                        <h2>Starter</h2>
-                        <p class="billing-price">€14.99<span>/month</span></p>
+            <div id="plans-wrap" hidden>
+                <div class="paywall-bridge" aria-hidden="true">
+                    <span class="paywall-bridge-line"></span>
+                    <div class="paywall-bridge-icons">
+                        <span class="paywall-bridge-icon">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </span>
+                        <span class="paywall-bridge-icon">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        </span>
+                        <span class="paywall-bridge-icon">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </span>
                     </div>
-                    <ul>
-                        <li>Up to 30 clients</li>
-                        <li>120 automatic reminders / month</li>
-                        <li>Payment reminders &amp; SMS receipts</li>
-                    </ul>
-                    <button type="button" class="billing-plan-btn" data-plan="starter">Continue with Starter</button>
-                </article>
+                    <span class="paywall-bridge-line"></span>
+                </div>
 
-                <article class="billing-plan-card billing-plan-popular" data-plan="growth">
-                    <span class="billing-popular-badge">Popular</span>
-                    <div class="billing-plan-top">
-                        <h2>Growth</h2>
-                        <p class="billing-price">€27.99<span>/month</span></p>
-                    </div>
-                    <ul>
-                        <li>Up to 70 clients</li>
-                        <li>280 automatic reminders / month</li>
-                        <li>Payment reminders &amp; SMS receipts</li>
-                    </ul>
-                    <button type="button" class="billing-plan-btn" data-plan="growth">Continue with Growth</button>
-                </article>
+                <div id="plans-panel" class="paywall-plans">
+                    <button type="button" class="paywall-plan-card paywall-plan-starter billing-plan-btn" data-plan="starter">
+                        <span class="paywall-accent-bar"></span>
+                        <span class="paywall-plan-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                        </span>
+                        <span class="paywall-plan-body">
+                            <span class="paywall-plan-title-line">
+                                <span class="paywall-plan-title">Starter</span>
+                            </span>
+                            <span class="paywall-stat">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                                Up to 30 clients
+                            </span>
+                            <span class="paywall-stat">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                Up to 120 automatic reminders / month
+                            </span>
+                        </span>
+                        <span class="paywall-plan-action">
+                            <span class="paywall-price">€14.99</span>
+                            <span class="paywall-price-unit">/ month</span>
+                            <svg class="paywall-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                        </span>
+                    </button>
 
-                <article class="billing-plan-card" data-plan="studio">
-                    <div class="billing-plan-top">
-                        <h2>Studio</h2>
-                        <p class="billing-price">€45.99<span>/month</span></p>
-                    </div>
-                    <ul>
-                        <li>Up to 150 clients</li>
-                        <li>600 automatic reminders / month</li>
-                        <li>Payment reminders &amp; SMS receipts</li>
-                    </ul>
-                    <button type="button" class="billing-plan-btn" data-plan="studio">Continue with Studio</button>
-                </article>
+                    <button type="button" class="paywall-plan-card paywall-plan-growth billing-plan-btn billing-plan-popular" data-plan="growth">
+                        <span class="paywall-accent-bar"></span>
+                        <span class="paywall-plan-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                        </span>
+                        <span class="paywall-plan-body">
+                            <span class="paywall-plan-title-line">
+                                <span class="paywall-plan-title">Growth</span>
+                                <span class="paywall-badge">Popular</span>
+                            </span>
+                            <span class="paywall-stat">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                                Up to 70 clients
+                            </span>
+                            <span class="paywall-stat">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                Up to 280 automatic reminders / month
+                            </span>
+                        </span>
+                        <span class="paywall-plan-action">
+                            <span class="paywall-price">€27.99</span>
+                            <span class="paywall-price-unit">/ month</span>
+                            <svg class="paywall-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                        </span>
+                    </button>
+
+                    <button type="button" class="paywall-plan-card paywall-plan-studio billing-plan-btn" data-plan="studio">
+                        <span class="paywall-accent-bar"></span>
+                        <span class="paywall-plan-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/></svg>
+                        </span>
+                        <span class="paywall-plan-body">
+                            <span class="paywall-plan-title-line">
+                                <span class="paywall-plan-title">Studio</span>
+                            </span>
+                            <span class="paywall-stat">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                                Up to 150 clients
+                            </span>
+                            <span class="paywall-stat">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                Up to 600 automatic reminders / month
+                            </span>
+                        </span>
+                        <span class="paywall-plan-action">
+                            <span class="paywall-price">€45.99</span>
+                            <span class="paywall-price-unit">/ month</span>
+                            <svg class="paywall-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                        </span>
+                    </button>
+                </div>
+
+                <p class="billing-footnote">
+                    Secure checkout · Cancel anytime · Promo codes at checkout
+                </p>
             </div>
 
-            <p class="billing-footnote">
-                Secure checkout powered by Stripe. Cancel anytime from the Lunio app.
-            </p>
             <p class="billing-error" id="checkout-error" hidden></p>
         </main>
 
@@ -166,7 +218,7 @@
 
   var statusEl = document.getElementById('billing-status');
   var authPanel = document.getElementById('auth-panel');
-  var plansPanel = document.getElementById('plans-panel');
+  var plansWrap = document.getElementById('plans-wrap');
   var accountBar = document.getElementById('account-bar');
   var accountEmail = document.getElementById('account-email');
   var authError = document.getElementById('auth-error');
@@ -190,14 +242,14 @@
       return;
     }
     authPanel.hidden = true;
-    plansPanel.hidden = false;
+    plansWrap.hidden = false;
     accountBar.hidden = false;
     accountEmail.textContent = user.email || ('Account ' + user.uid.slice(0, 8));
 
     if (wasCanceled) {
-      statusEl.textContent = 'Checkout was canceled. You can choose a plan whenever you are ready.';
+      statusEl.textContent = 'Checkout was canceled. Tap a plan whenever you are ready.';
     } else {
-      statusEl.textContent = 'Pick a plan to continue.';
+      statusEl.textContent = 'Tap a plan to subscribe';
     }
 
     if (preselectPlan) {
@@ -207,7 +259,7 @@
   }
 
   function setSignedOut() {
-    plansPanel.hidden = true;
+    plansWrap.hidden = true;
     accountBar.hidden = true;
     accountEmail.textContent = '';
     authPanel.hidden = false;
@@ -228,7 +280,11 @@
     var buttons = document.querySelectorAll('.billing-plan-btn');
     buttons.forEach(function (btn) {
       btn.disabled = true;
-      if (btn.getAttribute('data-plan') === planId) btn.textContent = 'Opening checkout…';
+      if (btn.getAttribute('data-plan') === planId) {
+        btn.classList.add('paywall-plan-loading');
+      } else {
+        btn.classList.add('paywall-plan-disabled');
+      }
     });
 
     try {
@@ -257,8 +313,7 @@
       checkoutBusy = false;
       buttons.forEach(function (btn) {
         btn.disabled = false;
-        var plan = btn.getAttribute('data-plan');
-        btn.textContent = 'Continue with ' + plan.charAt(0).toUpperCase() + plan.slice(1);
+        btn.classList.remove('paywall-plan-loading', 'paywall-plan-disabled');
       });
     }
   }
