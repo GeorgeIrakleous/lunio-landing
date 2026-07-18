@@ -144,10 +144,13 @@
   var preselectPlan = params.get('plan');
   var wasCanceled = params.get('canceled') === '1';
 
-  // Prefer hash handoff from the app; fall back to ?token= for older links
+  // Prefer ?token= (survives in-app browsers). Fall back to #handoff= for older links.
   function readHandoffToken() {
+    var fromQuery = params.get('token');
+    if (fromQuery) return fromQuery;
+
     var hash = window.location.hash || '';
-    if (hash.indexOf('handoff=') === 1 || hash.indexOf('#handoff=') === 0) {
+    if (hash.indexOf('handoff=') >= 0) {
       var raw = hash.replace(/^#?handoff=/, '');
       try {
         return decodeURIComponent(raw);
@@ -155,7 +158,7 @@
         return raw;
       }
     }
-    return params.get('token');
+    return null;
   }
 
   var handoffToken = readHandoffToken();
