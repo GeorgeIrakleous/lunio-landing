@@ -484,6 +484,12 @@ main.legal-main a {
     border-radius: 14px;
 }
 
+.billing-account-bar[hidden],
+.billing-auth-panel[hidden],
+.billing-plans[hidden] {
+    display: none !important;
+}
+
 .billing-account-info {
     display: flex;
     flex-direction: column;

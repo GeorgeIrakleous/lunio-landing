@@ -141,10 +141,24 @@
   var auth = firebase.auth();
 
   var params = new URLSearchParams(window.location.search);
-  var handoffToken = params.get('token');
   var preselectPlan = params.get('plan');
   var wasCanceled = params.get('canceled') === '1';
-  // While handoff runs, ignore the old browser session so we don't flash the wrong account
+
+  // Prefer hash handoff from the app; fall back to ?token= for older links
+  function readHandoffToken() {
+    var hash = window.location.hash || '';
+    if (hash.indexOf('handoff=') === 1 || hash.indexOf('#handoff=') === 0) {
+      var raw = hash.replace(/^#?handoff=/, '');
+      try {
+        return decodeURIComponent(raw);
+      } catch (e) {
+        return raw;
+      }
+    }
+    return params.get('token');
+  }
+
+  var handoffToken = readHandoffToken();
   var handoffInProgress = !!handoffToken;
 
   var statusEl = document.getElementById('billing-status');
@@ -161,17 +175,21 @@
     el.textContent = message || '';
   }
 
-  function cleanTokenFromUrl() {
+  function clearHandoffFromUrl() {
     params.delete('token');
     var clean = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
     window.history.replaceState({}, '', clean);
   }
 
   function setSignedIn(user) {
+    if (!user) {
+      setSignedOut();
+      return;
+    }
     authPanel.hidden = true;
     plansPanel.hidden = false;
     accountBar.hidden = false;
-    accountEmail.textContent = user.email || user.uid;
+    accountEmail.textContent = user.email || ('Account ' + user.uid.slice(0, 8));
 
     if (wasCanceled) {
       statusEl.textContent = 'Checkout was canceled. You can choose a plan whenever you are ready.';
@@ -198,6 +216,7 @@
     var user = auth.currentUser;
     if (!user) {
       showError(checkoutError, 'Please sign in first.');
+      setSignedOut();
       return;
     }
 
@@ -266,27 +285,33 @@
     showError(checkoutError, '');
     try {
       await auth.signOut();
+      setSignedOut();
     } catch (err) {
       showError(checkoutError, err.message || 'Could not sign out.');
+      setSignedOut();
     }
   });
 
   auth.onAuthStateChanged(function (user) {
-    // Don't apply the old browser session while app handoff is replacing it
     if (handoffInProgress) return;
     if (user) setSignedIn(user);
     else setSignedOut();
   });
 
+  // Always start with a clean signed-out UI until auth state is known
+  setSignedOut();
+  statusEl.textContent = handoffToken
+    ? 'Connecting your Lunio account…'
+    : 'Loading your account…';
+
   if (handoffToken) {
-    statusEl.textContent = 'Connecting your Lunio account…';
     auth.signOut()
-      .catch(function () { /* ignore if already signed out */ })
+      .catch(function () {})
       .then(function () {
         return auth.signInWithCustomToken(handoffToken);
       })
       .then(function () {
-        cleanTokenFromUrl();
+        clearHandoffFromUrl();
         handoffInProgress = false;
         if (auth.currentUser) setSignedIn(auth.currentUser);
         else setSignedOut();
@@ -294,11 +319,19 @@
       .catch(function (err) {
         console.error('Handoff sign-in failed:', err);
         handoffInProgress = false;
-        cleanTokenFromUrl();
-        statusEl.textContent = 'Could not connect automatically from the app. Please sign in below.';
-        // Clear any leftover session so the wrong account is not shown
+        clearHandoffFromUrl();
+        var msg = 'Could not connect automatically from the app.';
+        if (err && err.code === 'auth/unauthorized-domain') {
+          msg += ' This website domain is not authorized in Firebase.';
+        } else if (err && err.message) {
+          msg += ' ' + err.message;
+        } else {
+          msg += ' Please sign in below.';
+        }
+        statusEl.textContent = msg;
         auth.signOut().finally(function () {
           setSignedOut();
+          statusEl.textContent = msg;
         });
       });
   }
